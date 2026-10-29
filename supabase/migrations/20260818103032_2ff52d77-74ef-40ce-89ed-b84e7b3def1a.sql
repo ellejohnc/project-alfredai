@@ -1,0 +1,1 @@
+DELETE FROM public.lead_notes WHERE id = '5addc0bc-31ea-49b3-b33e-c0d37aec4997';

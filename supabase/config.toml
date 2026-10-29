@@ -1,0 +1,31 @@
+project_id = "rtsrodhymtxgkuvuhtpk"
+
+[functions]
+  [functions.meta-leads-webhook]
+    verify_jwt = false
+  [functions.ghl-meta-sync]
+    verify_jwt = false
+  [functions.sync-meta-leads]
+    verify_jwt = false
+  [functions.inject-lead]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.blog-api]
+    verify_jwt = false
+  [functions.list-sales-reps]
+    verify_jwt = false
+  [functions.public-pipeline-stats]
+    verify_jwt = false
+  [functions.request-password-reset]
+    verify_jwt = false
+  [functions.detect-abandoned-bookings]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true
+  [functions.ghl-set-owner]
+    verify_jwt = true
+  [functions.ghl-get-owner]
+    verify_jwt = true
+  [functions.update-ghl-contact]
+    verify_jwt = true

@@ -1,0 +1,38 @@
+-- Insert the investor request notification template
+INSERT INTO public.email_templates (
+  template_key,
+  subject,
+  heading,
+  body_text,
+  button_text,
+  footer_text,
+  custom_html,
+  use_custom_html,
+  header_bg_start,
+  header_bg_end,
+  button_bg_start,
+  button_bg_end,
+  body_bg_color,
+  footer_bg_color,
+  text_color,
+  heading_color,
+  button_text_color
+) VALUES (
+  'investor-request-notification',
+  '🔔 New Investor Access Request: {{investorName}} from {{firmName}}',
+  'New Investor Access Request',
+  'A new investor has submitted an access request for the Investor Portal. Please review and approve or reject from the admin panel.',
+  'Review in Admin Panel',
+  'This is an automated notification from AlfredAI Investor Relations.',
+  NULL,
+  false,
+  '#dc2626',
+  '#991b1b',
+  '#3b82f6',
+  '#2563eb',
+  '#ffffff',
+  '#f1f5f9',
+  '#475569',
+  '#ffffff',
+  '#ffffff'
+) ON CONFLICT (template_key) DO NOTHING;

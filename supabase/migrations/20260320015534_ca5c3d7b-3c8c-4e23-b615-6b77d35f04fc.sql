@@ -1,0 +1,2 @@
+ALTER TABLE public.quote_payments DROP CONSTRAINT quote_payments_pricing_option_check;
+ALTER TABLE public.quote_payments ADD CONSTRAINT quote_payments_pricing_option_check CHECK (pricing_option = ANY (ARRAY['A'::text, 'A1'::text, 'B'::text, 'C'::text]));

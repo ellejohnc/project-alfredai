@@ -1,0 +1,265 @@
+<title>The Docs Plan</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0e1322; --surface:#141a2b; --surface2:#1b2233;
+    --border:#222a3b; --border2:#333d52;
+    --text:#f4f6fb; --muted:#9aa6bc; --faint:#64748b;
+    --pink:#ff4d8d; --pink-soft:#ff7aa8; --pink-dim:rgba(255,77,141,.14);
+    --emerald:#2dd4bf; --emerald-dim:rgba(45,212,191,.14);
+    --amber:#f59e0b; --amber-dim:rgba(245,158,11,.14);
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(1100px 600px at 85% -12%, rgba(255,77,141,.07), transparent 60%),
+      var(--bg);
+    color:var(--text);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:44px 20px 90px}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink-soft)}
+  h1{font-size:clamp(28px,5vw,42px);line-height:1.04;margin:13px 0 10px;font-weight:760;letter-spacing:-.022em;text-wrap:balance}
+  h1 .thin{color:var(--muted);font-weight:400}
+  .lede{font-size:16px;color:var(--muted);max-width:70ch;margin:0}
+  code{font-family:var(--mono);font-size:.85em;background:var(--surface2);border:1px solid var(--border);
+    border-radius:4px;padding:1px 5px;color:#c9d3e2}
+
+  .rule{margin:24px 0 0;padding:16px 18px;border:1px solid var(--border2);border-left:3px solid var(--pink);
+    background:linear-gradient(180deg,var(--surface),var(--bg2));border-radius:0 11px 11px 0;font-size:14.5px;color:var(--muted)}
+  .rule b{color:var(--text)}
+
+  h2{font-size:20px;margin:46px 0 4px;font-weight:690;letter-spacing:-.012em}
+  .h2sub{color:var(--faint);font-size:12.5px;margin:0 0 16px}
+
+  .docs{display:grid;gap:11px}
+  .doc{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:15px 17px}
+  .doc.always{border-color:rgba(255,77,141,.35);background:linear-gradient(180deg,var(--pink-dim),var(--surface))}
+  .doc header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .doc h3{margin:0;font-size:15.5px;font-weight:670}
+  .doc h3 a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--border2)}
+  .doc h3 a:hover{color:var(--pink-soft);border-color:var(--pink)}
+  .tag{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--pink-soft);border:1px solid rgba(255,77,141,.4);background:var(--pink-dim);border-radius:20px;padding:2px 9px}
+  .job{margin:7px 0 0;font-size:13.5px;color:var(--muted)}
+  .fires{margin:9px 0 0;font-size:12px;color:var(--faint);line-height:1.7}
+  .fires .k{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--faint);margin-right:9px}
+
+  .how{display:grid;gap:10px;margin-top:4px}
+  .step{display:grid;grid-template-columns:26px 1fr;gap:12px;align-items:start;
+    border:1px solid var(--border);background:var(--surface);border-radius:11px;padding:13px 15px}
+  .step .n{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:11px;font-weight:700;background:var(--emerald-dim);color:var(--emerald);
+    border:1px solid rgba(45,212,191,.4)}
+  .step .t{font-size:13.5px}
+  .step .t b{color:var(--text)}
+  .step .t span{color:var(--muted)}
+
+  .warn{margin-top:14px;padding:13px 16px;border:1px solid rgba(245,158,11,.4);border-left:3px solid var(--amber);
+    background:var(--amber-dim);border-radius:0 10px 10px 0;font-size:13px;color:var(--muted)}
+  .warn b{color:var(--amber)}
+
+  .tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:620px}
+  th{text-align:left;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--faint);font-weight:600;padding:10px 13px;border-bottom:1px solid var(--border2);background:var(--bg2)}
+  td{padding:10px 13px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--border2)}
+  td a:hover{color:var(--pink-soft)}
+  td b{color:var(--emerald);font-weight:600}
+
+  footer{margin-top:52px;border-top:1px solid var(--border);padding-top:18px;color:var(--faint);font-size:12px;line-height:1.7}
+</style>
+
+<div class="wrap">
+<style id="docnav-css">.docnav{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 18px;padding:10px 12px;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:10px;background:color-mix(in srgb,currentColor 4%,transparent);font:12px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif}.docnav .dn-l{font:600 9.5px/1 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-right:4px}.docnav a,.docnav .dn-here{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;text-decoration:none;color:inherit;border:1px solid color-mix(in srgb,currentColor 22%,transparent);white-space:nowrap}.docnav a:hover{border-color:#ec4899}.docnav .dn-here{border-color:#ec4899;color:#ec4899;background:rgba(236,72,153,.12);font-weight:600}@media (max-width:520px){.docnav{gap:5px}.docnav a,.docnav .dn-here{padding:4px 8px;font-size:11.5px}}</style>
+<nav class="docnav" aria-label="The docs we follow"><span class="dn-l">The docs we follow</span><a target="_top" href="https://claude.ai/code/artifact/26bdaba6-6e2a-4ff7-a4d9-5f06158196bd">📋 Leads Build board</a><a target="_top" href="https://claude.ai/code/artifact/91718abb-c46b-49c8-9bc8-2a6a09aa6340">📘 Master Plan</a><a target="_top" href="https://claude.ai/code/artifact/1c73c39a-8383-4784-ba26-1483de720f04">🧱 Shipped log</a><a target="_top" href="https://claude.ai/code/artifact/82165f38-f123-46cc-ab2b-4e703359139e">📐 Design Standard</a><a target="_top" href="https://claude.ai/code/artifact/60e478dd-2f24-4541-8a2a-12a6962c8878">🗂️ Every Leads Page</a><a target="_top" href="https://claude.ai/code/artifact/b38eebde-7088-4ff5-8b93-f241b8b2fcf3">🎨 Live Samples</a><a target="_top" href="https://claude.ai/code/artifact/07f701e2-9530-426d-9b13-221a3da3135f">🎛️ UI-Kit</a><a target="_top" href="https://claude.ai/code/artifact/b4fa2ea5-a085-4bd9-9422-52713dc208da">🔌 GHL Integration</a><a target="_top" href="https://claude.ai/code/artifact/791fd2fd-b1c6-492c-9d1c-1005fa801a56">🔍 Design vs Build</a><span class="dn-here" aria-current="page">🗺️ Docs Plan</span></nav>
+  <div class="eyebrow">AlfredAI · Docs · the plan for the docs themselves</div>
+  <h1>The Docs Plan <span class="thin">— what is kept current, and what makes it happen</span></h1>
+  <p class="lede">Nine docs are the necessary ones. They are the only ones kept current, and keeping them current is
+  no longer something anyone has to remember — it is a gate that fails. Everything else is retired behind a signpost.</p>
+
+  <div class="rule">
+    <b>The rule, in one line:</b> when work lands, the docs that describe it are updated in the same session, and the
+    message where it lands carries the link. <b>The board is where the state is read</b> — what is next and what is
+    done — so everything that lands touches it, along with the Master Plan it has to agree with and the Shipped log
+    that records what actually went live.
+  </div>
+
+  <h2>The nine</h2>
+  <p class="h2sub">3 always · 6 matched to the files they describe</p>
+  <div class="docs">
+      <article class="doc always">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/26bdaba6-6e2a-4ff7-a4d9-5f06158196bd">Leads Build board</a></h3>
+          <span class="tag">always</span>
+        </header>
+        <p class="job">The tracker: every task with its status, next step and what was done. Update the TASK, with a note of what was actually done.</p>
+        <p class="fires"><span class="k">Fires on</span>Every change to the app or the edge functions</p>
+      </article>
+      <article class="doc always">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/91718abb-c46b-49c8-9bc8-2a6a09aa6340">Master Plan</a></h3>
+          <span class="tag">always</span>
+        </header>
+        <p class="job">The phase sequence. It has to agree with the board — two docs disagreeing about the same phase is the confusion the board exists to prevent.</p>
+        <p class="fires"><span class="k">Fires on</span>Every change to the app or the edge functions</p>
+      </article>
+      <article class="doc always">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/1c73c39a-8383-4784-ba26-1483de720f04">Shipped log</a></h3>
+          <span class="tag">always</span>
+        </header>
+        <p class="job">The record of what is actually live. An item lands here the moment it deploys, not when it is committed.</p>
+        <p class="fires"><span class="k">Fires on</span>Every change to the app or the edge functions</p>
+      </article>
+      <article class="doc">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/82165f38-f123-46cc-ab2b-4e703359139e">Leads Design Standard</a></h3>
+          
+        </header>
+        <p class="job">THE design authority for any lead surface — row, tiles, toolbar, peek, record. Every disagreement resolves here.</p>
+        <p class="fires"><span class="k">Fires on</span><code>src/components/admin/leads/**</code> · <code>src/pages/admin/leads/**</code> · <code>src/pages/admin/contacts/**</code> · <code>src/pages/admin/content/*Leads*.tsx</code> · <code>src/pages/admin/content/UnifiedLeadsInbox.tsx</code> · <code>src/lib/unifiedLead.ts</code> · <code>src/lib/leadSearch.ts</code> · <code>src/lib/leadAdminLinks.ts</code> · <code>src/hooks/useUnifiedLeads.ts</code></p>
+      </article>
+      <article class="doc">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/60e478dd-2f24-4541-8a2a-12a6962c8878">Every Leads Page</a></h3>
+          
+        </header>
+        <p class="job">What each individual lead surface is for and which tiles it carries. Shape right / content wrong is the mistake this one catches.</p>
+        <p class="fires"><span class="k">Fires on</span><code>src/pages/admin/content/*Leads*.tsx</code> · <code>src/pages/admin/content/UnifiedLeadsInbox.tsx</code> · <code>src/pages/admin/contacts/**</code> · <code>src/pages/admin/leads/**</code></p>
+      </article>
+      <article class="doc">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/b38eebde-7088-4ff5-8b93-f241b8b2fcf3">Live Samples</a></h3>
+          
+        </header>
+        <p class="job">How a shared component actually looks, at full size. If the built page and this deck disagree about looks, the deck wins.</p>
+        <p class="fires"><span class="k">Fires on</span><code>src/components/admin/leads/**</code> · <code>src/components/admin/AdminSpotlight.tsx</code> · <code>src/lib/adminSpotlightPages.ts</code> · <code>src/hooks/useSpotlightRecords.ts</code></p>
+      </article>
+      <article class="doc">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/07f701e2-9530-426d-9b13-221a3da3135f">UI-Kit</a></h3>
+          
+        </header>
+        <p class="job">The shared component inventory. A component is not done until a page imports it.</p>
+        <p class="fires"><span class="k">Fires on</span><code>src/components/admin/leads/**</code> · <code>src/components/ui/**</code> · <code>src/index.css</code> · <code>tailwind.config.ts</code></p>
+      </article>
+      <article class="doc">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/b4fa2ea5-a085-4bd9-9422-52713dc208da">GHL Integration</a></h3>
+          
+        </header>
+        <p class="job">Every GoHighLevel endpoint in use, which function owns it, and which way the data flows. Never invent a response shape — check docs/ghl/ first.</p>
+        <p class="fires"><span class="k">Fires on</span><code>supabase/functions/**ghl**</code> · <code>supabase/functions/_shared/ghlClient.ts</code> · <code>supabase/functions/**push-*-lead-to-ghl/**</code> · <code>supabase/functions/sync-meta-leads/**</code> · <code>supabase/functions/alpha-digital-sync/**</code> · <code>supabase/functions/verify-ghl-sync/**</code> · <code>docs/ghl/**</code></p>
+      </article>
+      <article class="doc">
+        <header>
+          <h3><a target="_top" href="https://claude.ai/code/artifact/791fd2fd-b1c6-492c-9d1c-1005fa801a56">Design vs Build</a></h3>
+          
+        </header>
+        <p class="job">Where the running app and the design disagree TODAY. Closing a gap means closing its row here, in the same session.</p>
+        <p class="fires"><span class="k">Fires on</span><code>src/components/admin/leads/**</code> · <code>src/pages/admin/leads/**</code> · <code>src/pages/admin/contacts/**</code> · <code>src/pages/admin/content/*Leads*.tsx</code> · <code>src/pages/admin/content/UnifiedLeadsInbox.tsx</code> · <code>src/components/admin/AdminSpotlight.tsx</code></p>
+      </article>
+  </div>
+
+  <h2>What makes it happen</h2>
+  <p class="h2sub">a mechanism, not a promise — because the promise is what kept failing</p>
+  <div class="how">
+    <div class="step"><span class="n">1</span><span class="t"><b>One source.</b>
+      <span><code>docs/doc-map.json</code> maps each doc to the files it describes. This page is generated from it,
+      so the plan and the gate cannot drift apart.</span></span></div>
+    <div class="step"><span class="n">2</span><span class="t"><b>CI fails.</b>
+      <span>The <code>Docs gate</code> step runs <code>scripts/doc-check.mjs --ci</code>: if a commit touches mapped
+      code and carries no doc link, the check goes red and names the docs it is missing.</span></span></div>
+    <div class="step"><span class="n">3</span><span class="t"><b>A hook says it out loud.</b>
+      <span>A Stop hook prints the same list at the end of every turn, so it does not depend on anyone thinking to
+      look.</span></span></div>
+    <div class="step"><span class="n">4</span><span class="t"><b>And the claim is checked against reality.</b>
+      <span>Publishing a doc also bumps its stamp in <code>docs/doc-versions.json</code>
+      (<code>node scripts/stamp-doc.mjs &lt;id&gt;</code>). The gate compares the two: a doc named in a commit whose
+      stamp did not move <b>fails the build and is named</b>. Pasting a link is no longer enough.</span></span></div>
+    <div class="step"><span class="n">5</span><span class="t"><b>Bypassing is visible, not blocked.</b>
+      <span><code>Docs: n/a — &lt;reason&gt;</code> in the commit message passes, and the reason goes
+      into the history. A gate that cannot be bypassed gets switched off; one that records the bypass stays on. Same
+      reasoning as the lint budget.</span></span></div>
+  </div>
+
+  <div class="warn">
+    <b>What this still does not do, said plainly.</b> The stamp proves a doc was <b>republished</b>, not that the
+    republish contained anything useful — and the stamp itself could be bumped by hand without publishing. That moves
+    a false claim from <i>satisfied by copy-paste</i> to <i>a deliberate false entry</i>, which is the difference
+    worth having, not a guarantee. And none of it can block a push while <code>main</code> has no branch protection:
+    the check goes red and visible, and nothing stops. Knowing about both beats discovering them.
+  </div>
+
+  <h2>Retired</h2>
+  <p class="h2sub">11 pages, frozen behind a signpost — deliberately NOT in the map</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Page</th><th>Current instead</th><th>Why it stopped</th></tr></thead>
+    <tbody>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/3505c2ef-62ba-4115-8144-62e467fa097c">Admin Panel — Real Inventory &amp; Phase Map</a></td>
+          <td><b>Master Plan</b></td>
+          <td>Its page inventory and phase map were folded into the Master Plan.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/eeade9ad-d305-4e18-9d62-d5a19668dd0d">Phase 2 — Execution Stages</a></td>
+          <td><b>Leads Build board</b></td>
+          <td>Stages A–D sequenced Phase 2, which is finished. A page still saying “Stage C · now” is the confusion the board prevents.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/0f12a285-5237-4e96-a769-2553143fbc3e">Leads Category — Unified System Plan</a></td>
+          <td><b>Design Standard + Master Plan</b></td>
+          <td>Split in two: the Standard holds the design decisions, the Master Plan holds the sequence.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/b1f8063d-46ad-4623-8ddb-1ff159e8eec9">How It Works — System &amp; Build</a></td>
+          <td><b>GHL Integration</b></td>
+          <td>Overtaken twice — by the v3 migration and the follower pull. The GoHighLevel surface now has its own page, generated against the vendored spec.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/31e1bd5b-36e5-4ac6-9463-16e2367ac0f0">Unified UI Kit — Live Samples (duplicate)</a></td>
+          <td><b>Live Samples</b></td>
+          <td>Two artifacts carried the same title and drifted apart. Whichever one got opened decided what the components looked like.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/e53cca00-7989-41e7-9623-4f4d93b1695a">AlfredAI — Product Roadmap (Phases 0–7)</a></td>
+          <td><b>Master Plan</b></td>
+          <td>The July phase list. Stopped at Phase 7, before Phase 8 existed.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/310dbfe4-b346-475d-903c-2cb0ba01d321">Original Tracked Plan</a></td>
+          <td><b>Leads Build board</b></td>
+          <td>The hand-written tracker that preceded the board, and kept going stale — which is why the board exists.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/82a3cb25-2b92-4705-846a-8df68e85f5f7">Admin Overhaul Plan (16 Jul)</a></td>
+          <td><b>Master Plan</b></td>
+          <td>The starting sketch, before any of it was built. Worth reading for how the scope was framed; worthless as a description of the app.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/454bdb8c-2671-452c-b6a5-c5cc4975f536">Monday Brief — Leads Build</a></td>
+          <td><b>Leads Build board</b></td>
+          <td>A brief for one Monday in July. A dated page cannot be kept current.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/6bee0677-0112-42a9-bf6e-2cc6b808543a">Daily Report — Fri 7 Aug</a></td>
+          <td><b>Leads Build board</b></td>
+          <td>Daily reports go in chat now. One left lying around gets read as the present state.</td>
+        </tr>
+        <tr>
+          <td><a target="_top" href="https://claude.ai/code/artifact/bcbca797-7136-4fa1-88eb-12db8c410e85">Moved — see the Master Plan</a></td>
+          <td><b>Master Plan</b></td>
+          <td>Already a stub pointing at the Master Plan. Found on 21 Aug by listing every published artifact rather than trusting the retired list — it was the one page nobody had counted.</td>
+        </tr>
+    </tbody>
+  </table></div>
+
+  <footer>
+    Generated from <code>docs/doc-map.json</code> by <code>scripts/build-docs-plan.mjs</code> — edit the map, re-run
+    the script, republish. Editing this page by hand would reintroduce the exact drift it documents.<br>
+    Numbers belong in the app, not in a doc: findings live on the <b>System Health</b> page, source counts on
+    <b>GHL Sync</b>. A doc that says “see Sync Health” is correct forever; one that says “3,765” is correct until Tuesday.
+  </footer>
+</div>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Offline - alfred ai</title>
+  <meta name="theme-color" content="#0F172A" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <style>
+    :root {
+      --background: #0F172A;
+      --foreground: #F8FAFC;
+      --primary: #EC4899;
+      --muted: #64748B;
+      --card: #1E293B;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--background);
+      color: var(--foreground);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 480px;
+      width: 100%;
+    }
+    
+    .icon-wrapper {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 32px;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(6, 182, 212, 0.2));
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .icon-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(6, 182, 212, 0.3));
+      border-radius: 24px;
+      filter: blur(20px);
+      z-index: -1;
+    }
+    
+    .icon {
+      width: 64px;
+      height: 64px;
+      stroke: var(--primary);
+      stroke-width: 1.5;
+      fill: none;
+    }
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--foreground), var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #DB2777);
+      color: white;
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(236, 72, 153, 0.5);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-secondary {
+      background: var(--card);
+      color: var(--foreground);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .status {
+      margin-top: 48px;
+      padding: 16px 24px;
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #EF4444;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .footer {
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .logo {
+      height: 24px;
+      width: auto;
+    }
+    
+    .footer-text {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    
+    /* Loading state */
+    .btn.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    .btn.loading .btn-text {
+      visibility: hidden;
+    }
+    
+    .btn.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Email report link */
+    .report-link {
+      margin-top: 24px;
+      font-size: 14px;
+    }
+    
+    .report-link a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .report-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon-wrapper">
+      <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="12" cy="20" r="1" fill="currentColor"/>
+      </svg>
+    </div>
+    
+    <h1>You're Offline</h1>
+    
+    <p>
+      It looks like you've lost your internet connection. 
+      Don't worry — when you're back online, everything will work again.
+    </p>
+    
+    <div class="actions">
+      <button class="btn btn-primary" onclick="tryReconnect()" id="retry-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 4v6h-6M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        <span class="btn-text">Try Again</span>
+      </button>
+      
+      <a href="/" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span class="btn-text">Go to Homepage</span>
+      </a>
+    </div>
+    
+    <div class="status">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span id="status-text">Waiting for connection...</span>
+      </div>
+    </div>
+    
+    <div class="report-link">
+      <a href="mailto:support@alfredai.bot?subject=Connectivity Issue&body=I experienced a connectivity issue on the alfred ai website.%0A%0APage URL: (please add the page you were trying to visit)%0ABrowser: (your browser name)%0ADevice: (your device type)">
+        Report this issue
+      </a>
+    </div>
+    
+    <div class="footer">
+      <img src="/alfred-ai-white-mid.png" alt="alfred ai" class="logo" onerror="this.style.display='none'" />
+      <span class="footer-text">alfred ai</span>
+    </div>
+  </div>
+  
+  <script>
+    // Check connection status
+    function updateStatus() {
+      const statusText = document.getElementById('status-text');
+      const statusDot = document.querySelector('.status-dot');
+      
+      if (navigator.onLine) {
+        statusText.textContent = 'Connection restored!';
+        statusDot.style.background = '#22C55E';
+        // Auto-reload after a short delay
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        statusText.textContent = 'Waiting for connection...';
+        statusDot.style.background = '#EF4444';
+      }
+    }
+    
+    // Try to reconnect
+    function tryReconnect() {
+      const btn = document.getElementById('retry-btn');
+      btn.classList.add('loading');
+      
+      // Try to fetch a small resource
+      fetch('/favicon.ico', { cache: 'no-store' })
+        .then(() => {
+          // Connected! Reload the page
+          window.location.reload();
+        })
+        .catch(() => {
+          // Still offline
+          btn.classList.remove('loading');
+          const statusText = document.getElementById('status-text');
+          statusText.textContent = 'Still offline. Please check your connection.';
+        });
+    }
+    
+    // Listen for online/offline events
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+    
+    // Initial check
+    updateStatus();
+    
+    // Periodic check
+    setInterval(() => {
+      if (!navigator.onLine) return;
+      
+      fetch('/favicon.ico', { cache: 'no-store' })
+        .then(() => {
+          updateStatus();
+        })
+        .catch(() => {
+          // Ignore fetch errors
+        });
+    }, 5000);
+  </script>
+</body>
+</html>

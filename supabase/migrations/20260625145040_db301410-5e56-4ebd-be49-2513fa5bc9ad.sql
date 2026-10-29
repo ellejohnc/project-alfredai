@@ -1,0 +1,1 @@
+ALTER TABLE public.partner_payout_details ADD COLUMN swift_code text;

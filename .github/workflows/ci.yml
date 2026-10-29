@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci`, not `npm install`: it installs exactly what the lockfile
+      # says and fails loudly when the lockfile and package.json disagree.
+      # It did fail, for a while — the lockfile had drifted. That is fixed,
+      # so the strict install is back and the drift cannot return unnoticed.
+      - run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.app.json
+
+      # Two gates, not one.
+      #
+      # rules-of-hooks is a HARD zero, enforced by having no suppression at all
+      # rather than by a separate run. A hook after an early
+      # return runs on some renders and not others, so React throws the moment
+      # the guard flips — it typechecks, it builds, and it renders fine until
+      # the condition changes. That exact bug shipped and made EVERY lead record
+      # fail to open, and a sweep then found five more of the same shape, four of
+      # them months old. Nothing but this rule catches it.
+      #
+      # Everything else is held by eslint-suppressions.json — ESLint's own bulk
+      # suppressions, which replaced a hand-rolled budget file on 26 Aug. The
+      # budget counted violations per rule, which is the weak version of this:
+      # a new `any` could hide behind a deleted one and the total never moved.
+      # Suppressions pin the exact file and rule, so anything new anywhere fails
+      # no matter what was fixed elsewhere.
+      #
+      # --pass-on-unpruned-suppressions is deliberate. Without it, FIXING a
+      # violation turns the build red until someone regenerates the file, which
+      # is exactly backwards — and Lovable and Will push straight to main, so a
+      # gate that punishes them for unrelated improvements is a gate that gets
+      # switched off. Slack is reported instead, and pruned on purpose with
+      # `npx eslint src --prune-suppressions`.
+      - name: Lint gates
+        run: |
+          # rules-of-hooks must never be suppressed. One eslint --suppress-all by
+          # someone in a hurry would pin a live crash into the file and the build
+          # would go green over the top of it, which is worse than never having
+          # had the gate. Checked before the lint run so the failure names the
+          # cause rather than the symptom.
+          node -e "
+            const fs = require('fs');
+            const f = 'eslint-suppressions.json';
+            if (!fs.existsSync(f)) process.exit(0);
+            const s = JSON.parse(fs.readFileSync(f, 'utf8'));
+            const bad = Object.keys(s).filter((k) => s[k]['react-hooks/rules-of-hooks']);
+            if (bad.length) {
+              console.error('::error::rules-of-hooks is suppressed in ' + bad.length + ' file(s): ' + bad.join(', '));
+              console.error('A hook below an early return is a runtime crash waiting on a guard to flip. Fix it; never pin it.');
+              process.exit(1);
+            }
+          "
+
+          npx eslint src --pass-on-unpruned-suppressions
+
+          # Report suppressions that are no longer needed, without failing on them.
+          if ! npx eslint src >/dev/null 2>&1; then
+            echo "::warning::Some entries in eslint-suppressions.json are no longer needed. Run 'npx eslint src --prune-suppressions' and commit the result."
+          fi
+          echo "Lint gates clean."
+
+      # THE TEST SUITE — all of it, because all of it is green.
+      #
+      # It was not. 10 of 17 files failed and CI ran none of them, so every test
+      # in this repo was decorative and the guards written to stop a bad link
+      # shipping would only ever have run if someone remembered to run them.
+      #
+      # 19 of those failures were src/test/edge-functions/**, which POST to the
+      # DEPLOYED Supabase functions — one of which sends email. They are excluded
+      # from the default run in vitest.config.ts and opt-in behind RUN_EDGE_TESTS,
+      # because a plain `vitest run` should never send live requests to
+      # production. The remaining 15 were real: two live bugs and a lot of tests
+      # describing components that had since been rewritten.
+      #
+      # Widened from two files to the whole suite once it went green. If it goes
+      # red again, fix it — do not narrow this back.
+      - name: Tests
+        run: npx vitest run
+
+      # THE DOCS GATE.
+      #
+      # I read this project through its docs, so a change that lands without
+      # them is a change I cannot follow. Asking me to remember has failed every
+      # time — this makes the absence visible instead.
+      #
+      # docs/doc-map.json says which doc describes which files. The board, the
+      # Master Plan and the Shipped log are `always`: the board is where I read
+      # what is next and what is done, so everything that lands touches it. The
+      # rest fire on the files they describe.
+      #
+      # Escapable ON PURPOSE, the same way a lint suppression is: "Docs: n/a -
+      # <reason>" in the commit message passes. A gate that cannot be bypassed
+      # gets switched off; one that writes the bypass into the history stays on.
+      - name: Docs gate
+        run: node scripts/doc-check.mjs --ci
+
+      - name: Build
+        run: npx vite build

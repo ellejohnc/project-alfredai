@@ -1,0 +1,38 @@
+-- Insert the new lead notification email template
+INSERT INTO public.email_templates (
+  template_key,
+  subject,
+  heading,
+  body_text,
+  button_text,
+  footer_text,
+  custom_html,
+  use_custom_html,
+  header_bg_start,
+  header_bg_end,
+  button_bg_start,
+  button_bg_end,
+  body_bg_color,
+  footer_bg_color,
+  text_color,
+  heading_color,
+  button_text_color
+) VALUES (
+  'new_lead_notification',
+  'New Lead: {{lead_name}} from {{source}}',
+  'New Lead Alert',
+  'A new lead has been captured from the Alfred AI website.',
+  'View in Admin',
+  'This is an automated notification from Alfred AI.',
+  NULL,
+  false,
+  '#1e293b',
+  '#334155',
+  '#3b82f6',
+  '#2563eb',
+  '#ffffff',
+  '#f1f5f9',
+  '#475569',
+  '#ffffff',
+  '#ffffff'
+) ON CONFLICT (template_key) DO NOTHING;

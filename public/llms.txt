@@ -1,0 +1,69 @@
+# alfred ai
+
+> alfred ai is an agentic AI platform purpose-built for the construction, property, and professional services industries. It automates admin-heavy workflows — project management, document processing, client communications, bidding, and compliance — saving teams 15+ hours per week with typical ROI in 90 days.
+
+## Company Overview
+
+alfred ai provides AI-powered automation for construction companies, property managers, and professional service firms. Unlike generic automation tools (Zapier, Make, n8n), alfred ai is industry-specific with pre-built workflows designed for how these industries actually operate.
+
+## Key Facts
+
+- **Founded**: Australian AI company
+- **Focus**: Construction, property management, consulting, professional services
+- **Core Value**: 70% reduction in administrative tasks
+- **ROI Timeline**: Typical return on investment within 90 days
+- **Time Saved**: 15+ hours per week per team
+- **Integration**: Works with existing tools — no rip-and-replace required
+
+## Core Product Suite
+
+- **Axiom** (/products/axiom): Custom AI learning for your business — machine learning trained on your data, processes, and decisions, with accuracy that compounds with every project.
+- **Butler** (/products/butler): Agentic AI that works alongside your people — always-on agents embedded in your workflows that scale output without scaling headcount.
+- **Watch** (/products/watch): Forward intelligence for owners and operators — predictive signals that surface risk and opportunity with lead time to act.
+- **Omega** (/products/omega): Your organisation's living intelligence — holds every workflow, lesson and decision your business has ever produced, generates the right SOP for the job at hand, and makes it available to your Butler agents with human approval at every consequential step.
+- **AccountableOS** (/products/accountable-os): The central operating system for accountable work — unifies Axiom, Butler, Watch, and Omega with enterprise governance, audit, and industry verticals for construction and contracting. Powered by Accountable.link.
+- **EVA** (/products/eva): Secure personal AI inside enterprise work — a two-way AI security guard that lets staff use personal AI without exposing enterprise data or injecting personal memory into company workflows. Includes DLP, redaction, secret blocking, human approval both ways, and full audit. Try the demo at https://eva.alfredai.app/demo.
+
+## Capabilities & Solutions
+
+- **Workflow Automation**: Pre-built and custom AI workflows for project management, invoicing, scheduling, and reporting
+- **Document Processing**: AI-powered extraction, analysis, and management of contracts, tenders, and compliance documents
+- **Voice Agents**: AI voice assistants for client communications, appointment booking, and follow-ups
+- **AI Bid Intelligence (alfredBID)**: Automated tender analysis, bid scoring, and response generation
+- **Contract Review**: AI clause analysis with risk scoring and amendment suggestions
+- **Client Portal**: White-labelled client-facing dashboards and communication tools
+
+
+## Industries Served
+
+- Construction & Building
+- Property Management
+- Consulting & Professional Services
+- Engineering
+- Architecture
+- Trade Services
+
+## Pricing Model
+
+- Custom pricing based on workflows and team size
+- Setup fee + monthly retainer structure
+- ROI calculator available at /roi-calculator
+
+## Resources
+
+- Blog: /resources/blog
+- Guides & Playbooks: /resources/guides
+- Interactive Demos: /resources/demos
+- FAQ: /faq
+- Documentation: /documentation
+- Case Studies: /impact-studies/case-studies
+
+## Contact
+
+- Website: https://new.alfredai.bot
+- Book a Demo: https://new.alfredai.bot/book-demo
+- Contact Page: https://new.alfredai.bot/contact
+
+## Detailed Content
+
+For comprehensive information, see [llms-full.txt](https://new.alfredai.bot/llms-full.txt)

@@ -1,0 +1,2 @@
+ALTER TABLE public.partner_profiles ADD COLUMN IF NOT EXISTS last_onboarding_reminder_at timestamptz;
+CREATE INDEX IF NOT EXISTS partner_profiles_last_reminder_idx ON public.partner_profiles (last_onboarding_reminder_at);

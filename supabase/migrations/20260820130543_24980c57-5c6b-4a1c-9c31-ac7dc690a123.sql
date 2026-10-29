@@ -1,0 +1,2 @@
+ALTER TABLE public.quotes DROP CONSTRAINT IF EXISTS check_status;
+ALTER TABLE public.quotes ADD CONSTRAINT check_status CHECK (status = ANY (ARRAY['draft'::text, 'sent'::text, 'signed'::text, 'won'::text, 'lost'::text, 'expired'::text, 'refunded'::text]));

@@ -1,0 +1,2 @@
+DELETE FROM public.ghl_sync_history WHERE submission_id = 'd4b794d1-0738-4c3a-bc6f-7a4ee1fa186e';
+DELETE FROM public.ghl_submissions WHERE lower(lead_email) LIKE 'elle.c+synctest@%' OR lead_name ILIKE '%SYNC TEST%';

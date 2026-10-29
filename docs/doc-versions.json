@@ -1,0 +1,12 @@
+{
+  "_why": "Written by scripts/stamp-doc.mjs on every publish. The docs gate reads it to tell a doc that was actually republished from a URL that was merely pasted into a commit message. Flat on purpose: one line per doc, so a change shows up unambiguously in the diff.",
+  "board": "2026-10-26#48",
+  "master-plan": "2026-10-26#33",
+  "design-standard": "2026-10-13#3",
+  "every-leads-page": "2026-10-13#2",
+  "live-samples": "2026-10-13#2",
+  "ui-kit": "2026-10-13#5",
+  "ghl": "2026-10-15#8",
+  "design-vs-build": "2026-10-13#8",
+  "shipped": "2026-10-26#32"
+}

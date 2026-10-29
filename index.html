@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function () {
+        try {
+          var t = JSON.parse(localStorage.getItem('admin-theme-cache') || 'null');
+          if (!t) return;
+          var root = document.documentElement;
+          if (t.isDark) root.classList.add('dark');
+          if (t.preset && ['system','light','blue-dark'].indexOf(t.preset) === -1)
+            root.setAttribute('data-admin-theme', t.preset);
+          if (t.accentColor) {
+            root.style.setProperty('--primary', t.accentColor);
+            root.style.setProperty('--ring', t.accentColor);
+            root.style.setProperty('--sidebar-primary', t.accentColor);
+            root.style.setProperty('--sidebar-ring', t.accentColor);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="google-site-verification" content="Uz_nlgQdByeBZN75hUBLaO28GsdihPgKHXsahl4yUsQ" />
+    
+    <!-- Preconnect to external origins for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Manrope:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+    
+    <!-- Preload hero logo for faster LCP -->
+    <link rel="preload" href="/alfred-ai-mid.png" as="image" fetchpriority="high" />
+    <link rel="preload" href="/alfred-ai-loader.png" as="image" fetchpriority="high" />
+    <link rel="preload" href="/alfred-ai-loader-white.png" as="image" fetchpriority="high" />
+    
+    <!-- Preconnect to Supabase storage for faster image loading -->
+    <link rel="preconnect" href="https://rtsrodhymtxgkuvuhtpk.supabase.co" />
+    <link rel="dns-prefetch" href="https://rtsrodhymtxgkuvuhtpk.supabase.co" />
+    
+    <!-- Preconnect to YouTube for video thumbnails and embeds -->
+    <link rel="preconnect" href="https://www.youtube.com" />
+    <link rel="preconnect" href="https://img.youtube.com" />
+    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="https://www.youtube.com" />
+    <link rel="dns-prefetch" href="https://img.youtube.com" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
+    <link rel="shortcut icon" href="/favicon.jpg" type="image/jpeg" />
+    <link rel="apple-touch-icon" href="/favicon.jpg" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Primary Meta Tags -->
+    <title>alfred ai — AI Agents for Construction &amp; Pro Services</title>
+    <meta name="description" content="alfred ai is a done-for-you AI agent service for construction and professional service firms. We build, train and run agents that cut admin and speed delivery." />
+    <meta name="author" content="alfred ai" />
+    <meta name="publisher" content="alfred ai" />
+    <meta name="theme-color" content="#0F172A" />
+    <meta name="keywords" content="alfred ai, alfredai, alfred ai agent, alfred ai, construction AI, AI takeoff, agentic AI, construction automation, AI for contractors, construction project management, construction workflow automation, AI execution layer, AI construction software, construction technology, AI estimating, AI takeoff software, construction AI agent, AI for builders" />
+    
+    <!-- GEO / AI Search Engine Friendly Meta -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="subject" content="alfred ai - Agentic AI for Construction" />
+    <meta name="classification" content="Construction Technology, Artificial Intelligence" />
+    <meta name="category" content="Construction AI Software" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="distribution" content="Global" />
+    <meta name="rating" content="General" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="3 days" />
+    
+    <!-- Geo targeting -->
+    <meta name="geo.region" content="AU" />
+    <meta name="geo.placename" content="Australia" />
+    
+    <!-- Dublin Core metadata for AI crawlers -->
+    <meta name="DC.title" content="alfred ai - Agentic AI for Construction Project Execution" />
+    <meta name="DC.creator" content="alfred ai" />
+    <meta name="DC.subject" content="Construction AI, alfred ai, AI Takeoff, Agentic AI" />
+    <meta name="DC.description" content="alfred ai provides agentic AI agents that orchestrate construction workflows. The leading AI execution layer for builders, contractors, and construction firms." />
+    <meta name="DC.publisher" content="alfred ai" />
+    <meta name="DC.type" content="Service" />
+    <meta name="DC.format" content="text/html" />
+    <meta name="DC.language" content="en" />
+    
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="alfred ai" />
+    
+    <!-- Android PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="alfred ai" />
+    
+    <!-- Microsoft Tile -->
+    <meta name="msapplication-TileColor" content="#0F172A" />
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
+    
+    <!-- Open Graph / Facebook
+         These are DEFAULTS, deliberately kept in the static HTML. SEO.tsx sets
+         better per-route values, but it does that via react-helmet, which is
+         client-side — and Facebook, LinkedIn, Slack, WhatsApp and the Twitter
+         card crawler do not run JavaScript. Without these they see no title and
+         no description and the link unfurls bare. The data-react-helmet
+         attribute lets helmet replace these rather than duplicate them, so a
+         real browser still ends up with the per-route values. -->
+    <meta property="og:title" content="alfred ai — AI Agents for Construction &amp; Professional Services" data-react-helmet="true" />
+    <meta property="og:description" content="Done-for-you AI agents for construction and professional service firms. alfred ai builds, trains and runs them — live in weeks, not quarters." data-react-helmet="true" />
+    <meta property="og:url" content="https://new.alfredai.bot" data-react-helmet="true" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://new.alfredai.bot/alfred-ai-logo.png" />
+    <meta property="og:image:alt" content="alfred ai - Agentic AI for Construction" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="alfred ai" />
+    <meta property="og:locale" content="en_AU" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@alfred ai" />
+    <meta name="twitter:title" content="alfred ai — AI Agents for Construction &amp; Professional Services" data-react-helmet="true" />
+    <meta name="twitter:description" content="Done-for-you AI agents for construction and professional service firms. Built, trained and run by alfred ai — live in weeks." data-react-helmet="true" />
+    <meta name="twitter:image" content="https://new.alfredai.bot/alfred-ai-logo.png" />
+    <meta name="twitter:image:alt" content="alfred ai Construction AI Platform" />
+
+    
+    <!-- Meta Pixel Code - deferred to not block initial paint -->
+    <script>
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          try{!function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){try{n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)}catch(e){}};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;t.onerror=function(){};s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '3381530382023604');
+          fbq('track', 'PageView');}catch(e){}
+        }, 2000);
+      });
+    </script>
+    <!-- End Meta Pixel Code -->
+    
+  </head>
+
+  <body>
+    <!-- Meta Pixel noscript fallback -->
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=3381530382023604&ev=PageView&noscript=1"
+    /></noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

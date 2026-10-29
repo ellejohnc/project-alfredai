@@ -1,0 +1,1520 @@
+/* Optimized font loading with font-display: swap for better LCP */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* GPU-accelerated shimmer animation for lazy images */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
+  will-change: transform;
+}
+
+/* Marquee animation for long button text on mobile */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(calc(-100% + 200px));
+  }
+  100% {
+    transform: translateX(calc(-100% + 200px));
+  }
+}
+
+.animate-marquee {
+  animation: marquee 6s linear infinite;
+}
+
+/* Optimize content-visibility for off-screen sections */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* ============================================
+   alfred ai Design System v2.0
+   ============================================
+   
+   COLOR PHILOSOPHY
+   ----------------
+   Neutral first (trust, clarity, longevity)
+   Think: Stripe × Linear × enterprise systems
+   
+   SPACING SYSTEM
+   --------------
+   Section padding:
+   - sm: py-12 md:py-16 (compact sections, trust strips)
+   - default: py-20 md:py-28 lg:py-32 (standard sections)
+   - lg: py-24 md:py-32 lg:py-40 (hero, CTA sections)
+   
+   BORDER RADIUS
+   -------------
+   - sm: rounded-md (buttons, inputs, small UI)
+   - default: rounded-lg (form elements)
+   - lg: rounded-xl (cards, containers)
+   - xl: rounded-2xl (feature cards, modals)
+   - full: rounded-full (pills, avatars only)
+   
+   ICON CONTAINERS
+   ---------------
+   - sm: w-10 h-10 rounded-lg
+   - md: w-12 h-12 rounded-xl
+   
+   TYPOGRAPHY
+   ----------
+   Section label: text-sm font-medium text-primary uppercase tracking-wider
+   Section heading: text-3xl sm:text-4xl lg:text-5xl font-semibold
+   Section subtitle: text-lg text-muted-foreground leading-relaxed
+   
+   CARD PATTERNS
+   -------------
+   Standard: bg-card border border-border rounded-xl
+   Feature: bg-card border border-border rounded-xl card-hover
+   Gradient: bg-gradient-to-br + border border-border rounded-2xl
+   
+   ANIMATION TIMING
+   ----------------
+   - Stagger delay: 0.1s per item
+   - Duration: 0.5s for items, 0.6s for headers
+   - Easing: ease-out for entrances
+   
+   ============================================ */
+
+@layer base {
+  :root {
+    /* Primary Backgrounds — clean white-first for enterprise feel */
+    --background: 0 0% 100%; /* Pure White */
+    --background-alt: 210 20% 98%; /* Faint Slate */
+    --background-pure: 0 0% 100%; /* Pure White */
+    
+    /* Primary Text */
+    --foreground: 222 47% 11%; /* Midnight Navy #0F172A */
+    
+    /* Secondary Text */
+    --muted: 210 20% 97%;
+    --muted-foreground: 215 16% 42%; /* Slate Grey */
+    
+    /* Brand Accent - Signal Pink — RARE accent only (<5% of visible area).
+       Use for: a single hero CTA, AI signal dots, focus rings, tiny highlights.
+       Never for: large fills, section backgrounds, gradients, most CTAs. */
+    --primary: 330 81% 60%; /* Signal Pink #EC4899 */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 333 71% 51%; /* Darker pink */
+
+    /* CTA intent — enterprise ink (near-black). Default primary action colour. */
+    --cta: 222 47% 11%; /* Midnight Navy / ink */
+    --cta-foreground: 0 0% 100%;
+    --cta-hover: 222 47% 16%;
+    
+    /* Secondary Accent - Mint Signal */
+    --secondary: 168 75% 51%; /* Mint Signal #2DD4BF */
+    --secondary-foreground: 222 47% 11%;
+    
+    /* Authority Accent - Deep Indigo */
+    --accent: 217 33% 17%; /* Deep Indigo #1E293B */
+    --accent-foreground: 0 0% 100%;
+    
+    /* Highlight - Amber */
+    --warning: 38 92% 50%; /* Amber Pulse #F59E0B */
+    --warning-foreground: 222 47% 11%;
+    
+    /* State Colors */
+    --success: 168 75% 51%; /* Mint Signal */
+    --destructive: 0 84% 60%; /* Crimson Red #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --info: 175 91% 35%; /* Impact Teal */
+    --disabled: 214 20% 80%; /* Cool Grey #CBD5E1 */
+
+    /* Status system (Principle 18) — colour ALWAYS pairs with icon + label.
+       Each status has a bold text colour and a soft surface tint. */
+    --status-ontrack: 160 84% 32%; /* green */
+    --status-ontrack-surface: 160 60% 94%;
+    --status-atrisk: 38 92% 42%; /* amber */
+    --status-atrisk-surface: 38 92% 92%;
+    --status-blocked: 0 74% 48%; /* red */
+    --status-blocked-surface: 0 84% 95%;
+    --status-neutral: 215 16% 42%; /* slate */
+    --status-neutral-surface: 210 20% 95%;
+    --status-info: 205 90% 42%; /* blue — brand new, nothing wrong yet */
+    --status-info-surface: 205 90% 94%;
+
+    /* Elevation scale (Principle 22) — max 3 levels. Reserve for true overlays. */
+    --elevation-1: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
+    --elevation-2: 0 4px 12px -2px hsl(222 47% 11% / 0.10);
+    --elevation-3: 0 16px 40px -8px hsl(222 47% 11% / 0.22);
+    
+    /* AI Signal Color - Use sparingly (≤5% visible area)
+       Only for: AI indicators, micro-interactions, insight callouts
+       Never for: CTAs, backgrounds, headlines, charts */
+    --ai-signal: 330 81% 60%; /* Signal Pink #EC4899 */
+    --ai-signal-foreground: 0 0% 100%;
+    
+    /* UI Elements */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 330 81% 60%;
+    
+    --radius: 0.75rem;
+    
+    /* Sidebar */
+    --sidebar-background: 60 9% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 330 81% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 20% 90%;
+    --sidebar-ring: 330 81% 60%;
+  }
+
+  .dark {
+    --background: 222 47% 7%;
+    --background-alt: 217 33% 12%;
+    --background-pure: 222 47% 5%;
+    --foreground: 0 0% 98%;
+    --muted: 217 33% 14%;
+    --muted-foreground: 215 16% 65%;
+    --primary: 330 81% 60%;
+    --primary-foreground: 0 0% 100%;
+    /* CTA intent — enterprise ink inverts to off-white in dark */
+    --cta: 0 0% 98%;
+    --cta-foreground: 222 47% 11%;
+    --cta-hover: 0 0% 90%;
+    --secondary: 168 75% 51%;
+    --secondary-foreground: 222 47% 11%;
+    --accent: 210 20% 96%;
+    --accent-foreground: 222 47% 11%;
+    --card: 217 33% 17%;
+    --card-foreground: 60 9% 98%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 60 9% 98%;
+    --border: 217 33% 25%;
+    --input: 217 33% 25%;
+    --ring: 330 81% 60%;
+    /* Status system — desaturated for dark surfaces (Principle 20) */
+    --status-ontrack: 160 64% 52%;
+    --status-ontrack-surface: 160 40% 16%;
+    --status-atrisk: 38 92% 60%;
+    --status-atrisk-surface: 38 60% 16%;
+    --status-blocked: 0 74% 62%;
+    --status-blocked-surface: 0 50% 18%;
+    --status-neutral: 215 16% 65%;
+    --status-neutral-surface: 217 33% 18%;
+    --status-info: 205 90% 62%;
+    --status-info-surface: 205 60% 17%;
+    --elevation-1: 0 1px 2px 0 hsl(0 0% 0% / 0.4);
+    --elevation-2: 0 4px 12px -2px hsl(0 0% 0% / 0.5);
+    --elevation-3: 0 16px 40px -8px hsl(0 0% 0% / 0.6);
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 60 9% 98%;
+    --sidebar-primary: 330 81% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 60 9% 98%;
+    --sidebar-border: 217 33% 25%;
+    --sidebar-ring: 330 81% 60%;
+  }
+
+  /* Pure Black (OLED) dark theme */
+  [data-admin-theme="black-dark"] {
+    --background: 0 0% 0%;
+    --background-alt: 0 0% 5%;
+    --background-pure: 0 0% 0%;
+    --foreground: 0 0% 96%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 65%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 96%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 15%;
+  }
+
+  /* Charcoal - warm dark gray */
+  [data-admin-theme="charcoal"] {
+    --background: 0 0% 10%;
+    --background-alt: 0 0% 13%;
+    --background-pure: 0 0% 7%;
+    --foreground: 210 17% 90%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 62%;
+    --card: 0 0% 13%;
+    --card-foreground: 210 17% 90%;
+    --popover: 0 0% 13%;
+    --popover-foreground: 210 17% 90%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 210 17% 90%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 210 17% 90%;
+    --sidebar-border: 0 0% 20%;
+  }
+
+  /* Midnight - deep navy */
+  [data-admin-theme="midnight"] {
+    --background: 230 35% 7%;
+    --background-alt: 230 30% 10%;
+    --background-pure: 230 40% 5%;
+    --foreground: 210 25% 86%;
+    --muted: 230 25% 12%;
+    --muted-foreground: 215 20% 55%;
+    --card: 230 30% 10%;
+    --card-foreground: 210 25% 86%;
+    --popover: 230 30% 10%;
+    --popover-foreground: 210 25% 86%;
+    --border: 230 20% 18%;
+    --input: 230 20% 18%;
+    --sidebar-background: 230 35% 7%;
+    --sidebar-foreground: 210 25% 86%;
+    --sidebar-accent: 230 25% 12%;
+    --sidebar-accent-foreground: 210 25% 86%;
+    --sidebar-border: 230 20% 18%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.4s ease;
+  }
+
+  #root {
+    overflow-x: clip; /* Moved from html,body to preserve sticky positioning */
+  }
+
+  /* Show scrollbar only while scrolling - uses a class toggled by JS */
+  html.is-scrolling {
+    scrollbar-color: hsl(var(--primary) / 0.45) hsl(var(--primary) / 0.08);
+  }
+
+  /* Webkit scrollbar styling - hidden by default with smooth fade */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--primary) / 0);
+    transition: background 0.4s ease;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0);
+    border-radius: 4px;
+    transition: background 0.4s ease;
+  }
+
+  html.is-scrolling::-webkit-scrollbar-track {
+    background: hsl(var(--primary) / 0.08);
+  }
+
+  html.is-scrolling::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.45);
+  }
+
+  html.is-scrolling::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.65);
+  }
+
+  /* Hide scrollbar completely on mobile */
+  @media (max-width: 768px) {
+    html, body {
+      scrollbar-width: none;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  /* Utility: always-visible scrollbar for scrollable containers */
+  .scrollbar-visible {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.45) hsl(var(--primary) / 0.08);
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    display: block;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background: hsl(var(--primary) / 0.08);
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.45);
+    border-radius: 4px;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.65);
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-foreground;
+  }
+}
+
+@layer components {
+  /* ============================================
+     SECTION UTILITIES
+     ============================================ */
+  
+  /* Standard section padding */
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+  
+  /* Compact section padding (trust strips, logo sections) */
+  .section-padding-sm {
+    @apply py-12 md:py-16;
+  }
+  
+  /* Large section padding (hero, final CTA) */
+  .section-padding-lg {
+    @apply py-24 md:py-32 lg:py-40;
+  }
+  
+  /* Container with max-width and padding */
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* The back row is anchored to the page (not the screen), so every subpage
+     reserves room for it above its own content. 60px = the 44px touch target
+     plus one 8px-rhythm gap; it sits under the fixed menu bar, so it reads as
+     extra air rather than a band. Scoped by data-back-row, which only
+     SubpageBackButton sets, so the homepage and admin are untouched. */
+  html[data-back-row="on"] body {
+    padding-top: 3.75rem;
+  }
+
+  
+  /* ============================================
+     TYPOGRAPHY UTILITIES
+     ============================================ */
+  
+  /* Mono ink "gradient" text — enterprise, no colour wash */
+  .text-gradient {
+    @apply text-foreground;
+  }
+  
+  /* Section label - uppercase, muted grey (no accent) */
+  .section-label {
+    @apply text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4 block;
+  }
+  
+  /* Section heading - responsive sizes */
+  .section-heading {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6;
+  }
+  
+  /* Section subtitle - muted, readable */
+  .section-subtitle {
+    @apply text-lg text-muted-foreground leading-relaxed;
+  }
+  
+  /* ============================================
+     CARD UTILITIES
+     ============================================ */
+  
+  /* Standard card styling */
+  .card-base {
+    @apply bg-card border border-border rounded-xl;
+  }
+  
+  /* Card with hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Feature card (larger, more prominent) */
+  .card-feature {
+    @apply bg-card border border-border rounded-2xl p-8;
+  }
+  
+  /* ============================================
+     ICON CONTAINER UTILITIES
+     ============================================ */
+  
+  /* Small icon container */
+  .icon-container-sm {
+    @apply w-10 h-10 rounded-lg flex items-center justify-center;
+  }
+  
+  /* Medium icon container */
+  .icon-container-md {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center;
+  }
+  
+  /* Icon container — neutral surface (enterprise mono) */
+  .icon-container-primary {
+    @apply bg-muted text-foreground;
+  }
+  
+  /* Icon container with secondary background */
+  .icon-container-secondary {
+    @apply bg-secondary/10;
+  }
+  
+  /* Icon container with destructive background */
+  .icon-container-destructive {
+    @apply bg-destructive/10;
+  }
+  
+  /* ============================================
+     LINK UTILITIES
+     ============================================ */
+  
+  /* Animated underline effect */
+  .link-underline {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-foreground after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+  }
+  
+  /* Arrow link with hover effect */
+  .link-arrow {
+    @apply inline-flex items-center gap-2 text-foreground font-medium text-sm transition-colors hover:text-muted-foreground;
+  }
+  
+  .link-arrow svg {
+    @apply w-4 h-4 transition-transform;
+  }
+  
+  .link-arrow:hover svg {
+    @apply translate-x-1;
+  }
+}
+
+@layer utilities {
+  /* Tabular figures for financial / data tables (Principle 15) */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Reading-measure cap for long-form text (Principle 13): ~45–75 chars */
+  .measure-prose {
+    max-width: 42rem; /* ~680px */
+  }
+
+  /* Safe area padding for mobile bottom nav */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Entrance glow animation for search bar - theme responsive */
+  @keyframes entrance-glow {
+    0%, 100% { 
+      box-shadow: 0 0 0 transparent; 
+    }
+    50% { 
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--primary) / 0.25); 
+    }
+  }
+
+  /* Light mode: pink/rose accent glow */
+  :root .animate-entrance-glow {
+    animation: entrance-glow-light 0.7s ease-in-out 4;
+  }
+
+  @keyframes entrance-glow-light {
+    0%, 100% { 
+      box-shadow: 0 0 0 transparent; 
+    }
+    50% { 
+      box-shadow: 0 0 24px hsl(340 82% 52% / 0.5), 0 0 48px hsl(340 82% 52% / 0.25); 
+    }
+  }
+
+  /* Dark mode: cyan/teal accent glow */
+  .dark .animate-entrance-glow {
+    animation: entrance-glow-dark 0.7s ease-in-out 4;
+  }
+
+  @keyframes entrance-glow-dark {
+    0%, 100% { 
+      box-shadow: 0 0 0 transparent; 
+    }
+    50% { 
+      box-shadow: 0 0 24px hsl(180 70% 50% / 0.5), 0 0 48px hsl(180 70% 50% / 0.25); 
+    }
+  }
+
+  /* Bounce/wiggle animation for search bar entrance */
+  @keyframes entrance-bounce {
+    0% { 
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px) scale(0.9);
+    }
+    50% { 
+      opacity: 1;
+      transform: translateX(-50%) translateY(8px) scale(1.02);
+    }
+    70% { 
+      transform: translateX(-50%) translateY(-4px) scale(0.98);
+    }
+    85% { 
+      transform: translateX(-50%) translateY(2px) scale(1.01);
+    }
+    100% { 
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+  }
+
+  .animate-entrance-bounce {
+    animation: entrance-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-entrance-glow,
+    :root .animate-entrance-glow,
+    .dark .animate-entrance-glow,
+    .animate-entrance-bounce {
+      animation: none;
+    }
+  }
+
+  .bg-background-alt {
+    background-color: hsl(var(--background-alt));
+  }
+  
+  .bg-background-pure {
+    background-color: hsl(var(--background-pure));
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ============================================
+     MOBILE TOUCH UTILITIES
+     ============================================ */
+  
+  /* Prevent text selection and improve touch handling */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Ensure minimum touch target size (44x44px recommended) */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Active state feedback for buttons */
+  .tap-highlight {
+    @apply transition-all duration-150;
+  }
+
+  .tap-highlight:active {
+    @apply scale-95 opacity-80;
+  }
+
+  /* Subtle press effect */
+  .tap-scale {
+    @apply transition-transform duration-100;
+  }
+
+  .tap-scale:active {
+    @apply scale-[0.97];
+  }
+
+  /* Background highlight on tap */
+  .tap-bg {
+    @apply transition-colors duration-100;
+  }
+
+  .tap-bg:active {
+    @apply bg-muted/50;
+  }
+
+  /* ============================================
+     SCROLL REVEAL ANIMATIONS
+     ============================================ */
+
+  .reveal-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .reveal-fade-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-fade-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .reveal-fade-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-fade-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .reveal-fade-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .reveal-scale.revealed {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .reveal-fade {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
+
+  .reveal-fade.revealed {
+    opacity: 1;
+  }
+
+  /* Stagger delay utilities */
+  .reveal-delay-100 { transition-delay: 100ms; }
+  .reveal-delay-200 { transition-delay: 200ms; }
+  .reveal-delay-300 { transition-delay: 300ms; }
+  .reveal-delay-400 { transition-delay: 400ms; }
+  .reveal-delay-500 { transition-delay: 500ms; }
+  .reveal-delay-600 { transition-delay: 600ms; }
+  
+  /* ============================================
+     AURORA HERO UTILITIES
+     ============================================ */
+  
+  /* Enterprise dark hero — near-black mono gradient, no colour wash */
+  .hero-aurora-bg {
+    background: linear-gradient(
+      135deg,
+      hsl(222 47% 6%) 0%,
+      hsl(222 47% 9%) 40%,
+      hsl(222 30% 11%) 70%,
+      hsl(222 47% 7%) 100%
+    );
+  }
+  
+  /* Subtle floor glow — neutral with a faint single pink hint */
+  .aurora-glow {
+    background: radial-gradient(
+      ellipse 70% 45% at 50% 100%,
+      hsl(330 81% 60% / 0.06) 0%,
+      hsl(0 0% 100% / 0.02) 35%,
+      transparent 70%
+    );
+  }
+  
+  /* Animated gradient border keyframes */
+  @keyframes gradient-rotate {
+    0% { --gradient-angle: 0deg; }
+    100% { --gradient-angle: 360deg; }
+  }
+  
+  @property --gradient-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  
+  /* Dark input prompt styling with animated pink/purple border */
+  .hero-input-prompt {
+    @apply bg-slate-900/95 rounded-2xl backdrop-blur-sm;
+    position: relative;
+    transform: perspective(1000px) rotateX(2deg) translateY(0);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+    background: 
+      linear-gradient(to right, hsl(222 47% 11% / 0.95), hsl(222 47% 11% / 0.95)) padding-box,
+      conic-gradient(
+        from var(--gradient-angle),
+        hsl(330 81% 60%) 0deg,
+        hsl(280 80% 60%) 60deg,
+        hsl(320 90% 55%) 120deg,
+        hsl(350 85% 60%) 180deg,
+        hsl(280 75% 55%) 240deg,
+        hsl(310 85% 60%) 300deg,
+        hsl(330 81% 60%) 360deg
+      ) border-box;
+    animation: gradient-rotate 4s linear infinite;
+    box-shadow: 
+      0 8px 30px rgba(0, 0, 0, 0.5),
+      0 20px 50px -10px rgba(0, 0, 0, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Outer glow effect - border only */
+  .hero-input-prompt::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 1.25rem;
+    padding: 4px;
+    background: conic-gradient(
+      from var(--gradient-angle),
+      hsl(330 81% 60%) 0deg,
+      hsl(280 80% 60%) 60deg,
+      hsl(320 90% 55%) 120deg,
+      hsl(350 85% 60%) 180deg,
+      hsl(280 75% 55%) 240deg,
+      hsl(310 85% 60%) 300deg,
+      hsl(330 81% 60%) 360deg
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: gradient-rotate 4s linear infinite;
+    filter: blur(6px);
+    opacity: 0.5;
+    z-index: -1;
+    pointer-events: none;
+  }
+  
+  .hero-input-prompt:hover {
+    transform: perspective(1000px) rotateX(1deg) translateY(-2px);
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.55),
+      0 25px 60px -10px rgba(0, 0, 0, 0.45),
+      0 2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+  .hero-input-prompt:hover::before {
+    opacity: 0.7;
+  }
+  
+  .hero-input-prompt:focus-within {
+    transform: perspective(1000px) rotateX(0deg) translateY(-3px);
+    box-shadow: 
+      0 15px 45px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  }
+  
+  .hero-input-prompt:focus-within::before {
+    opacity: 0.9;
+    filter: blur(10px);
+  }
+  
+  /* Active cursor animation for hero input */
+  .hero-input-prompt input:focus,
+  .hero-input-prompt textarea:focus {
+    caret-color: hsl(330 81% 60%);
+  }
+  
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+
+  /* ============================================
+     GLASSMORPHISM EFFECTS
+     ============================================ */
+
+  /* Light glassmorphism - for light backgrounds */
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 
+      0 8px 32px 0 rgba(31, 38, 135, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 1px 0 rgba(255, 255, 255, 0.2) inset;
+  }
+
+  /* Enhanced glassmorphism for prominent elements like calculators */
+  .glassmorphism-strong {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 12px 48px 0 rgba(31, 38, 135, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+      0 2px 0 rgba(255, 255, 255, 0.25) inset,
+      0 -1px 0 rgba(0, 0, 0, 0.05) inset;
+  }
+
+  /* Dark glassmorphism - for dark backgrounds */
+  .glassmorphism-dark {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  /* Card glassmorphism - for card overlays */
+  .glassmorphism-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* ============================================
+     MESH GRADIENT BACKGROUNDS
+     ============================================ */
+
+  /* Subtle mesh for hero sections */
+  .mesh-gradient-hero {
+    background: 
+      radial-gradient(at 20% 30%, rgba(255, 77, 141, 0.12) 0px, transparent 60%),
+      radial-gradient(at 80% 70%, rgba(45, 212, 191, 0.12) 0px, transparent 60%),
+      radial-gradient(at 50% 50%, rgba(99, 102, 241, 0.08) 0px, transparent 70%);
+    background-color: hsl(var(--background));
+  }
+
+  /* General mesh gradient */
+  .mesh-gradient-bg {
+    background: 
+      radial-gradient(at 0% 0%, rgba(255, 77, 141, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(45, 212, 191, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(255, 77, 141, 0.08) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(45, 212, 191, 0.08) 0px, transparent 50%);
+    background-color: hsl(var(--background));
+  }
+
+  /* Intense mesh for dark sections */
+  .mesh-gradient-intense {
+    background: 
+      radial-gradient(at 30% 20%, rgba(255, 77, 141, 0.15) 0px, transparent 50%),
+      radial-gradient(at 70% 80%, rgba(45, 212, 191, 0.15) 0px, transparent 50%);
+    background-color: hsl(var(--background));
+  }
+
+  /* ============================================
+     GLOW EFFECTS
+     ============================================ */
+
+  /* Pulsing glow animation */
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(255, 77, 141, 0.4); 
+    }
+    50% { 
+      box-shadow: 0 0 30px rgba(255, 77, 141, 0.8); 
+    }
+  }
+
+  /* Static glows */
+  .glow-pink {
+    box-shadow: 0 0 20px rgba(255, 77, 141, 0.5);
+  }
+
+  .glow-mint {
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+  }
+
+  /* Pulsing glow for CTAs */
+  .glow-pulse {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Glow on hover */
+  .glow-button-hover {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-button-hover:hover {
+    box-shadow: 0 0 25px rgba(255, 77, 141, 0.6);
+  }
+
+  /* ============================================
+     FLOATING ANIMATIONS
+     ============================================ */
+
+  /* Standard float */
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-10px); 
+    }
+  }
+
+  /* Slower float for larger elements */
+  @keyframes float-slow {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-15px); 
+    }
+  }
+
+  /* Subtle float for cards */
+  @keyframes float-subtle {
+    0%, 100% { 
+      transform: translateY(0px); 
+    }
+    50% { 
+      transform: translateY(-5px); 
+    }
+  }
+
+  /* Animation classes */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 8s ease-in-out infinite;
+  }
+
+  .animate-float-subtle {
+    animation: float-subtle 4s ease-in-out infinite;
+  }
+
+  /* Add delay variants for staggered effect */
+  .animate-float-delay-1 {
+    animation: float 6s ease-in-out 0.5s infinite;
+  }
+
+  .animate-float-delay-2 {
+    animation: float 6s ease-in-out 1s infinite;
+  }
+
+  .animate-float-delay-3 {
+    animation: float 6s ease-in-out 1.5s infinite;
+  }
+
+  /* ============================================
+     3D CARD EFFECTS
+     ============================================ */
+
+  /* Container needs perspective */
+  .card-3d-container {
+    perspective: 1000px;
+  }
+
+  /* Card with 3D tilt on hover */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .card-3d:hover {
+    transform: rotateX(5deg) rotateY(5deg) translateZ(10px);
+  }
+
+  /* Alternative: lighter tilt */
+  .card-tilt-light {
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease-out;
+  }
+
+  .card-tilt-light:hover {
+    transform: rotateX(3deg) rotateY(3deg) translateZ(5px);
+  }
+
+  /* Reverse tilt for variety */
+  .card-tilt-reverse {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .card-tilt-reverse:hover {
+    transform: rotateX(-5deg) rotateY(-5deg) translateZ(10px);
+  }
+
+  /* ============================================
+     TEXT & BORDER GRADIENTS
+     ============================================ */
+
+  /* Text gradients */
+  .text-gradient-primary {
+    background: linear-gradient(90deg, hsl(330 81% 60%), hsl(168 75% 51%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #D4AF37, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(90deg, hsl(217 33% 17%), hsl(168 75% 51%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated gradient text */
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Shimmer animation for loading states */
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .text-gradient-animated {
+    color: hsl(330 81% 60%);
+  }
+
+  /* Border gradients using pseudo-element */
+  .border-gradient {
+    position: relative;
+  }
+
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(90deg, hsl(330 81% 60%), hsl(168 75% 51%));
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .border-gradient:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Rainbow animated button */
+.rainbow-button {
+  position: relative;
+  background: hsl(var(--card));
+  border: none;
+  z-index: 0;
+}
+
+.rainbow-button::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--gradient-angle, 0deg),
+    hsl(var(--primary)),
+    hsl(330 90% 65%),
+    hsl(280 85% 60%),
+    hsl(var(--primary)),
+    hsl(330 90% 65%)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: gradient-rotate 3s linear infinite;
+  z-index: -1;
+}
+
+.rainbow-button::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--gradient-angle, 0deg),
+    hsl(var(--primary) / 0.4),
+    hsl(330 90% 65% / 0.3),
+    hsl(280 85% 60% / 0.2),
+    hsl(var(--primary) / 0.4)
+  );
+  filter: blur(8px);
+  animation: gradient-rotate 3s linear infinite;
+  z-index: -2;
+  opacity: 0.6;
+}
+
+.rainbow-button:hover::after {
+  opacity: 1;
+  filter: blur(12px);
+}
+
+/* =====================================================
+   ACCESSIBILITY - REDUCED MOTION PREFERENCES
+   WCAG 2.1 AA Compliance
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Disable floating animations */
+  .animate-float,
+  .animate-float-slow,
+  .animate-float-subtle,
+  .animate-float-delay-1,
+  .animate-float-delay-2,
+  .animate-float-delay-3 {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* Static accent for animated text (reduced motion) */
+  .text-gradient-animated {
+    animation: none !important;
+    color: hsl(330 81% 60%);
+    -webkit-text-fill-color: hsl(330 81% 60%);
+  }
+
+  /* Disable glow pulse animations */
+  .glow-pulse {
+    animation: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Tutorial button flash animation for user attention */
+@keyframes tutorial-button-flash {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 8px hsl(var(--primary) / 0), 0 0 20px hsl(var(--primary) / 0.3);
+    transform: scale(1.02);
+  }
+}
+
+.tutorial-flash-button {
+  animation: tutorial-button-flash 1.2s ease-in-out infinite !important;
+  position: relative;
+  z-index: 100;
+}
+
+/* TipTap Table Styles — editor & public blog rendering */
+.ProseMirror table,
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  border: 1px solid hsl(var(--border));
+}
+
+.ProseMirror table td,
+.ProseMirror table th,
+.prose table td,
+.prose table th {
+  border: 1px solid hsl(var(--border));
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  min-width: 100px;
+  position: relative;
+}
+
+.ProseMirror table th,
+.prose table th {
+  background: hsl(var(--muted));
+  font-weight: 700;
+  text-align: left;
+}
+
+.ProseMirror table td p,
+.ProseMirror table th p {
+  margin: 0;
+}
+
+/* Selected cell highlight in editor */
+.ProseMirror .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--primary) / 0.1);
+  pointer-events: none;
+}
+
+/* Column resize handle */
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: hsl(var(--primary));
+  pointer-events: none;
+}
+
+.ProseMirror.resize-cursor {
+  cursor: col-resize;
+}
+
+/* Ensure list markers are always visible in editor + preview */
+.ProseMirror ul,
+.prose ul {
+  list-style: disc;
+  padding-inline-start: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.ProseMirror ol,
+.prose ol {
+  padding-inline-start: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+/* Default ordered style only when no explicit type is set */
+.ProseMirror ol:not([type]),
+.prose ol:not([type]) {
+  list-style-type: decimal;
+}
+
+/* Ordered list type variants */
+.ProseMirror ol[type="a"],
+.prose ol[type="a"] {
+  list-style-type: lower-alpha;
+}
+.ProseMirror ol[type="A"],
+.prose ol[type="A"] {
+  list-style-type: upper-alpha;
+}
+.ProseMirror ol[type="i"],
+.prose ol[type="i"] {
+  list-style-type: lower-roman;
+}
+.ProseMirror ol[type="I"],
+.prose ol[type="I"] {
+  list-style-type: upper-roman;
+}
+
+/* Nested defaults for 1.a / 2.a style when type isn't explicitly set */
+.ProseMirror ol ol:not([type]),
+.prose ol ol:not([type]) {
+  list-style-type: lower-alpha;
+}
+.ProseMirror ol ol ol:not([type]),
+.prose ol ol ol:not([type]) {
+  list-style-type: lower-roman;
+}
+
+/* Bullet nesting defaults */
+.ProseMirror ul ul,
+.prose ul ul {
+  list-style-type: circle;
+}
+.ProseMirror ul ul ul,
+.prose ul ul ul {
+  list-style-type: square;
+}
+
+/* Make blockquote clearly visible in editor + preview */
+.ProseMirror blockquote,
+.prose blockquote {
+  border-inline-start: 3px solid hsl(var(--border));
+  margin: 1rem 0;
+  padding-inline-start: 1rem;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.ProseMirror li,
+.prose li {
+  margin: 0.25rem 0;
+}
+
+/* ============================================================
+   iOS Safari crash mitigation (mobile)
+   backdrop-filter: blur() spawns a separate GPU compositing
+   layer per element. With dozens of glass surfaces + framer
+   motion layers, iOS Safari's content process runs out of
+   memory and force-reloads ("A problem repeatedly occurred").
+   On small screens we drop the blur and make the translucent
+   glass backgrounds more opaque so they stay readable.
+   ============================================================ */
+@media (max-width: 768px) {
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Keep translucent glass surfaces readable once blur is gone */
+  [class*="backdrop-blur"].bg-background\/80,
+  [class*="backdrop-blur"].bg-background\/70,
+  [class*="backdrop-blur"].bg-background\/60,
+  [class*="backdrop-blur"].bg-background\/50 {
+    background-color: hsl(var(--background) / 0.95) !important;
+  }
+}
+
+/* ============================================
+   Partner Portal input utility
+   ============================================ */
+@layer components {
+  .portal-input {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-partner-navy outline-none transition-colors placeholder:text-slate-400 focus:border-partner-pink focus:ring-2 focus:ring-partner-pink/20;
+  }
+}
+
+/* ============================================
+   AlfredIntelligenceLoader — v2 loading transition
+   INPUT → ALFRED AI → OUTPUT. Sequence runs once
+   (~2s); dots then loop for long loads. Reduced
+   motion gets the finished static composition.
+   ============================================ */
+.ail-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ail-draw 0.45s ease-out forwards;
+  animation-delay: var(--d, 0ms);
+}
+.ail-ring {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ail-ring 0.65s ease-in-out 0.55s forwards;
+}
+.ail-icon {
+  opacity: 0;
+  animation: ail-fade 0.4s ease-out forwards;
+  animation-delay: var(--d, 0ms);
+}
+.ail-icon-out {
+  animation-name: ail-fade-ink;
+}
+.ail-dot {
+  animation: ail-dot 1.5s linear infinite;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes ail-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ail-ring {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ail-fade {
+  to { opacity: 1; }
+}
+@keyframes ail-fade-ink {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+@keyframes ail-dot {
+  0% { transform: translateX(0); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateX(var(--dx, 150px)); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ail-line,
+  .ail-ring {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .ail-icon {
+    animation: none;
+    opacity: 1;
+  }
+  .ail-dot {
+    display: none;
+  }
+}
+
+/* Loader: sun-and-planets orbit */
+.ail-orbit-in { animation: ail-spin 14s linear infinite; }
+.ail-counter-in { animation: ail-spin 14s linear infinite reverse; }
+.ail-orbit-out { animation: ail-spin 22s linear infinite reverse; }
+.ail-counter-out { animation: ail-spin 22s linear infinite; }
+.ail-sun { animation: ail-pulse 2s ease-in-out infinite; }
+@keyframes ail-spin { to { transform: rotate(360deg); } }
+@keyframes ail-pulse { 50% { transform: translate(-50%, -50%) scale(1.04); } 0%,100% { transform: translate(-50%, -50%) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .ail-orbit-in, .ail-counter-in, .ail-orbit-out, .ail-counter-out, .ail-sun { animation: none; }
+}
+
+/* Loader radial progress: eases to 90% over the 2s minimum, completes on finish */
+.ail-progress { stroke-dashoffset: 100; animation: ail-progress 2s cubic-bezier(.2,.7,.3,1) forwards; }
+.ail-progress-done { stroke-dashoffset: 0; transition: stroke-dashoffset 300ms ease-out; }
+@keyframes ail-progress { to { stroke-dashoffset: 10; } }
+@media (prefers-reduced-motion: reduce) { .ail-progress { animation: none; stroke-dashoffset: 10; } }

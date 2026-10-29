@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://rtsrodhymtxgkuvuhtpk.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "alfredai-mcp",
+      "version": "0.1.0",
+      "title": "alfred ai MCP"
+    },
+    "tools": [
+      {
+        "name": "search_blog_posts",
+        "title": "Search blog posts",
+        "description": "Search alfred ai's published blog posts by keyword and return matching titles, excerpts, categories and slugs.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Optional keyword to match against title, excerpt or category."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of posts to return (default 10, max 25)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_faqs",
+        "title": "Search FAQs",
+        "description": "Search alfred ai's published FAQs by keyword and return matching questions and answers.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Optional keyword to match against the question, answer or category."
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of FAQs to return (default 15, max 40)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_job_openings",
+        "title": "List job openings",
+        "description": "List alfred ai's currently published job openings, including title, department, location and how to apply.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Maximum number of openings to return (default 20, max 50)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "submit_lead",
+        "title": "Submit a contact enquiry",
+        "description": "Submit a new contact enquiry / lead to alfred ai. Use when a person wants alfred ai to get in touch about its AI services. Only submit details the person has explicitly provided.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "description": "The person's first name."
+            },
+            "lastName": {
+              "type": "string",
+              "description": "The person's last name."
+            },
+            "email": {
+              "type": "string",
+              "description": "A valid contact email address."
+            },
+            "company": {
+              "type": "string",
+              "description": "Company or organisation name."
+            },
+            "jobTitle": {
+              "type": "string",
+              "description": "The person's role or job title."
+            },
+            "phone": {
+              "type": "string",
+              "description": "Contact phone number."
+            },
+            "message": {
+              "type": "string",
+              "description": "What the person is interested in or their question."
+            }
+          },
+          "required": [
+            "firstName",
+            "email"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

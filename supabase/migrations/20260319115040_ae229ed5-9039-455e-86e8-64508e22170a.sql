@@ -1,0 +1,1 @@
+ALTER TABLE public.quotes ADD COLUMN poc_requested boolean NOT NULL DEFAULT false;

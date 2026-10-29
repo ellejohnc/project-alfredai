@@ -1,0 +1,1 @@
+ALTER TABLE public.quotes ADD COLUMN pricing_option text DEFAULT NULL;

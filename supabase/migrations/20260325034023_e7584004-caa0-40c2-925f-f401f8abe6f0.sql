@@ -1,0 +1,1 @@
+ALTER TABLE public.quotes ADD COLUMN IF NOT EXISTS bundle_pricing boolean NOT NULL DEFAULT false;

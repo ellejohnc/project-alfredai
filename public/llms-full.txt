@@ -1,0 +1,272 @@
+# alfred ai — Complete Reference
+
+> alfred ai is an agentic AI platform purpose-built for the construction, property, and professional services industries. It automates admin-heavy workflows — project management, document processing, client communications, bidding, and compliance — saving teams 15+ hours per week with typical ROI in 90 days.
+
+## Table of Contents
+
+1. Company Overview
+2. Products & Solutions
+3. Industries & Use Cases
+4. Competitive Positioning
+5. Pricing & ROI
+6. Resources & Content
+7. Technical Architecture
+8. Contact & Support
+
+---
+
+## 1. Company Overview
+
+alfred ai is an Australian AI technology company building agentic AI systems for industries traditionally underserved by generic automation tools. The platform combines large language models, workflow orchestration, and industry-specific knowledge to eliminate repetitive administrative work.
+
+### Core Statistics
+- 70% reduction in administrative tasks
+- 15+ hours saved per week per team
+- ROI typically achieved within 90 days
+- Works with existing tech stacks — no migration required
+
+### Mission
+To free construction and professional service teams from administrative burden so they can focus on building, creating, and delivering value.
+
+---
+
+## 2. Products & Solutions
+
+### Core Product Suite
+
+#### Axiom — Custom AI learning for your business (/products/axiom)
+Machine learning trained on your data, processes, and decisions, turning institutional knowledge into models that sharpen the more your business runs.
+- Bespoke model training on your historical data, documents, and decision patterns
+- Learns from estimates, schedules, and outcomes; accuracy compounds with every project
+- Trained and deployed within governed, private boundaries
+
+#### Butler — Agentic AI that serves your teams (/products/butler)
+Always-on agents embedded inside your workflows that handle repetitive coordination and follow-ups, scaling output without scaling headcount.
+- Always-on agents with no dropped tasks
+- Embedded in the tools and processes you already use
+- Human-in-the-loop approvals where they matter
+
+#### Watch — Forward intelligence for owners and operators (/products/watch)
+Predictive signals that surface risk and opportunity with lead time to act, instead of reacting after the fact.
+- Forward-looking indicators across projects and pipeline
+- Owner-level visibility across the whole business
+- Prioritised, actionable signals — not noise
+
+#### Omega — Living Intelligence (/products/omega)
+Your organisation's living memory — holds every workflow, lesson, and decision the business has ever produced; generates the right SOP for the job at hand; and makes it available to your people and Butler agents with human approval at every consequential step.
+- Living organisational memory that learns from every project
+- SOP and playbook generation from real business history
+- Human approval at every consequential step
+
+#### AccountableOS — The central operating system for accountable work (/products/accountable-os)
+Unifies Axiom, Butler, Watch, and Omega inside one accountable system with enterprise-grade governance, secure deployment, continuous monitoring, audit trails, and industry verticals for construction and contracting. Powered by Accountable.link.
+
+#### EVA — Secure personal AI inside enterprise work (/products/eva)
+A two-way AI security guard that lets employees and contractors use personal AI without exposing enterprise data or injecting private personal memory into company workflows.
+- Two-way security guard controlling outbound and inbound AI collaboration
+- DLP and redaction of client names, project details, amounts, and personal identifiers
+- Personal data firewall blocking private chat history, opinions, and confidential third-party data
+- Human approval both ways, critical secret blocking (passwords, API keys, tokens)
+- Enterprise-only mode and full audit logging
+- Interactive demo: https://eva.alfredai.app/demo
+
+### Workflow Automation
+
+Pre-built and custom AI workflows for:
+- Project management automation
+- Invoice processing and reconciliation
+- Scheduling and resource allocation
+- Automated reporting and dashboards
+- Client follow-up sequences
+- Document routing and approvals
+
+### AI Document Processing
+- Contract extraction and analysis
+- Tender document parsing
+- Compliance document management
+- Automated data entry from unstructured documents
+- PDF, Word, and image processing
+
+### AI Voice Agents
+- Inbound call handling and routing
+- Outbound appointment scheduling
+- Client follow-up calls
+- Lead qualification conversations
+- After-hours support automation
+- Plans: Starter (2 workflows), Growth (5 workflows), Scale (10 workflows), Enterprise (unlimited)
+
+### AI Bid Intelligence (BID)
+- Automated tender discovery and matching
+- Document analysis and requirement extraction
+- Bid/no-bid decision support with scoring
+- Response generation and template management
+- Competitor analysis
+- Win probability assessment
+
+### Contract Review & Analysis
+- Clause-by-clause risk analysis
+- Traffic light risk scoring (green/amber/red)
+- AI-powered amendment suggestions
+- Standard comparison (AS4000, NEC, FIDIC)
+- Version tracking and change management
+
+### Client Portal
+- White-labelled client dashboards
+- Real-time project status updates
+- Document sharing and collaboration
+- Communication hub
+- Payment tracking
+
+---
+
+## 3. Industries & Use Cases
+
+### Construction & Building
+- Project documentation automation
+- Subcontractor management
+- Safety compliance tracking
+- Progress reporting
+- Variation management
+- Defect tracking
+
+### Property Management
+- Tenant communications
+- Maintenance request routing
+- Lease management
+- Inspection scheduling
+- Financial reporting
+
+### Consulting & Professional Services
+- Client onboarding automation
+- Time tracking and billing
+- Proposal generation
+- Knowledge management
+- Resource planning
+
+### Engineering
+- Technical document processing
+- Standards compliance checking
+- Drawing management
+- Quality assurance workflows
+
+### Trade Services
+- Job scheduling and dispatch
+- Quote generation
+- Client communications
+- Invoice automation
+
+---
+
+## 4. Competitive Positioning
+
+### alfred ai vs Generic Automation Tools
+
+| Feature | alfred ai | Zapier/Make/n8n |
+|---------|----------|-----------------|
+| Industry knowledge | Built-in construction/property expertise | Generic |
+| Setup complexity | Pre-built workflows, guided setup | DIY configuration |
+| AI capabilities | Agentic AI with reasoning | Basic triggers/actions |
+| Document understanding | Native document AI | Requires third-party add-ons |
+| Voice agents | Integrated | Not available |
+| Support model | Dedicated success team | Self-serve documentation |
+
+### Comparison Pages Available
+- vs Zapier: /compare/vs-zapier
+- vs Make: /compare/vs-make
+- vs n8n: /compare/vs-n8n
+- vs Monday.com: /compare/vs-monday
+- vs ClickUp: /compare/vs-clickup
+- vs Asana: /compare/vs-asana
+- vs Procore: /compare/vs-procore
+- vs Jobber: /compare/vs-jobber
+- vs GoHighLevel: /compare/vs-gohighlevel
+- vs Pipedrive: /compare/vs-pipedrive
+
+---
+
+## 5. Pricing & ROI
+
+### Pricing Structure
+- **Setup Fee**: One-time onboarding and configuration
+- **Monthly Retainer**: Ongoing platform access and support
+- Custom pricing based on team size, workflow count, and complexity
+- ROI calculator available at /roi-calculator
+
+### ROI Model
+- Conservative, likely, and best-case projections provided
+- Payback period tracking
+- Industry-specific benchmarks
+
+---
+
+## 6. Resources & Content
+
+### Blog
+URL: /resources/blog
+Topics: AI in construction, workflow automation, industry insights, product updates
+
+### Guides & Playbooks
+URL: /resources/guides
+Downloadable resources for implementing AI in various industries
+
+### Interactive Demos
+URL: /resources/demos
+Live demonstrations of key features:
+- Decision Support AI
+- Document Processing
+- Workflow Automation
+- Voice Agent capabilities
+- Contract Review
+- Bid Intelligence
+
+### FAQ
+URL: /faq
+Comprehensive answers about the platform, pricing, integration, and support
+
+### Documentation
+URL: /documentation
+Technical documentation for platform features and integrations
+
+### Impact Studies
+URL: /impact-studies
+- Case Studies: /impact-studies/case-studies
+- Testimonials: /impact-studies/testimonials
+- ROI Breakdowns: /impact-studies/roi-breakdowns
+- Execution: /impact-studies/execution
+- Admin Reduction: /impact-studies/reduce-admin
+- Revenue Per Head: /impact-studies/revenue-per-head
+- Scale Without Hiring: /impact-studies/scale-without-hiring
+
+---
+
+## 7. Technical Architecture
+
+### Platform Capabilities
+- Cloud-native architecture
+- Real-time data processing
+- Multi-model AI (combines multiple LLMs for optimal results)
+- API-first design for integrations
+- Enterprise-grade security
+- SOC 2 compliance ready
+
+### Integration Approach
+- Connects to existing tools via APIs
+- No rip-and-replace required
+- Supports common construction and business software
+- Custom integration development available
+
+---
+
+## 8. Contact & Support
+
+- **Website**: https://new.alfredai.bot
+- **Book a Demo**: https://new.alfredai.bot/book-demo
+- **Contact**: https://new.alfredai.bot/contact
+- **Support**: https://new.alfredai.bot/support
+- **Careers**: https://new.alfredai.bot/careers
+- **Partners**: https://new.alfredai.bot/partners
+
+---
+
+*Last updated: March 2026*
+*alfred ai — Agentic AI for Construction & Professional Services*

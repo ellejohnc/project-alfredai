@@ -1,0 +1,1 @@
+ALTER TABLE public.webinar_registrations ADD COLUMN IF NOT EXISTS turnover text;

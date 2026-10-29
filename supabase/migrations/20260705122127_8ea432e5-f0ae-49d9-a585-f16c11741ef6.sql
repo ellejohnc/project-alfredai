@@ -1,0 +1,1 @@
+UPDATE public.feature_flags SET is_enabled = true WHERE flag_key = 'booked_synced_alerts_enabled';

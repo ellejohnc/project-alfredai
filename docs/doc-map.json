@@ -1,0 +1,253 @@
+{
+  "_why": [
+    "Which doc describes which part of the code, so nothing has to be remembered.",
+    "",
+    "I have asked more times for the docs to be kept current than for anything else,",
+    "and every previous answer was a promise to remember. This is the mechanism that",
+    "replaces the promise: scripts/doc-check.mjs reads the diff, maps the changed",
+    "files through this file, and names the docs that describe them. CI fails when a",
+    "commit touches mapped code and carries no doc link, so the absence is visible",
+    "without anyone reading code.",
+    "",
+    "THE BOARD IS THE TRACKER. It is `always` because it is where I read what is next",
+    "and what is done — it is not one doc among nine, it is the one that must never be",
+    "behind. Every piece of work that lands touches it.",
+    "",
+    "Retired artifacts are deliberately NOT in this list. They are frozen signposts;",
+    "updating one would be the drift this file exists to stop.",
+    "",
+    "The human-readable version of this file is the Docs Plan page, generated from",
+    "it by scripts/build-docs-plan.mjs. The page and the gate therefore cannot",
+    "disagree: there is one source, and the page is a rendering of it."
+  ],
+  "escapeHatch": "Docs: n/a",
+  "docs": [
+    {
+      "id": "board",
+      "name": "Leads Build board",
+      "url": "https://claude.ai/code/artifact/26bdaba6-6e2a-4ff7-a4d9-5f06158196bd",
+      "why": "The tracker: every task with its status, next step and what was done. Update the TASK, with a note of what was actually done.",
+      "always": true,
+      "covers": [
+        "src/**",
+        "supabase/functions/**",
+        "supabase/migrations/**"
+      ]
+    },
+    {
+      "id": "master-plan",
+      "name": "Master Plan",
+      "url": "https://claude.ai/code/artifact/91718abb-c46b-49c8-9bc8-2a6a09aa6340",
+      "why": "The phase sequence. It has to agree with the board — two docs disagreeing about the same phase is the confusion the board exists to prevent.",
+      "always": true,
+      "covers": [
+        "src/**",
+        "supabase/functions/**",
+        "supabase/migrations/**"
+      ]
+    },
+    {
+      "id": "design-standard",
+      "name": "Leads Design Standard",
+      "url": "https://claude.ai/code/artifact/82165f38-f123-46cc-ab2b-4e703359139e",
+      "why": "THE design authority for any lead surface — row, tiles, toolbar, peek, record. Every disagreement resolves here.",
+      "covers": [
+        "src/components/admin/leads/**",
+        "src/pages/admin/leads/**",
+        "src/pages/admin/contacts/**",
+        "src/pages/admin/content/*Leads*.tsx",
+        "src/pages/admin/content/UnifiedLeadsInbox.tsx",
+        "src/lib/unifiedLead.ts",
+        "src/lib/leadSearch.ts",
+        "src/lib/leadAdminLinks.ts",
+        "src/hooks/useUnifiedLeads.ts"
+      ],
+      "excludes": [
+        "src/components/admin/leads/AlphaBackfillPanel.tsx",
+        "src/components/admin/leads/__tests__/AlphaBackfillPanel.test.tsx",
+        "src/components/admin/leads/MetaAttributionAudit.tsx",
+        "src/components/admin/leads/PushToGhlButton.tsx",
+        "src/components/admin/leads/PushB2bLeadToGhlButton.tsx",
+        "src/components/admin/leads/PushAlphaLeadToGhlButton.tsx",
+        "src/components/admin/leads/ownerName.ts",
+        "src/components/admin/leads/sanitizeNoteHtml.ts"
+      ]
+    },
+    {
+      "id": "every-leads-page",
+      "name": "Every Leads Page",
+      "url": "https://claude.ai/code/artifact/60e478dd-2f24-4541-8a2a-12a6962c8878",
+      "why": "What each individual lead surface is for and which tiles it carries. Shape right / content wrong is the mistake this one catches.",
+      "covers": [
+        "src/pages/admin/content/*Leads*.tsx",
+        "src/pages/admin/content/UnifiedLeadsInbox.tsx",
+        "src/pages/admin/contacts/**",
+        "src/pages/admin/leads/**"
+      ]
+    },
+    {
+      "id": "live-samples",
+      "name": "Live Samples",
+      "url": "https://claude.ai/code/artifact/b38eebde-7088-4ff5-8b93-f241b8b2fcf3",
+      "why": "How a shared component actually looks, at full size. If the built page and this deck disagree about looks, the deck wins.",
+      "covers": [
+        "src/components/admin/leads/**",
+        "src/components/admin/AdminSpotlight.tsx",
+        "src/lib/adminSpotlightPages.ts",
+        "src/hooks/useSpotlightRecords.ts"
+      ],
+      "excludes": [
+        "src/components/admin/leads/AlphaBackfillPanel.tsx",
+        "src/components/admin/leads/__tests__/AlphaBackfillPanel.test.tsx",
+        "src/components/admin/leads/MetaAttributionAudit.tsx",
+        "src/components/admin/leads/PushToGhlButton.tsx",
+        "src/components/admin/leads/PushB2bLeadToGhlButton.tsx",
+        "src/components/admin/leads/PushAlphaLeadToGhlButton.tsx",
+        "src/components/admin/leads/ownerName.ts",
+        "src/components/admin/leads/sanitizeNoteHtml.ts"
+      ]
+    },
+    {
+      "id": "ui-kit",
+      "name": "UI-Kit",
+      "url": "https://claude.ai/code/artifact/07f701e2-9530-426d-9b13-221a3da3135f",
+      "why": "The shared component inventory. A component is not done until a page imports it.",
+      "covers": [
+        "src/components/admin/leads/**",
+        "src/components/ui/**",
+        "src/index.css",
+        "tailwind.config.ts"
+      ],
+      "excludes": [
+        "src/components/admin/leads/AlphaBackfillPanel.tsx",
+        "src/components/admin/leads/__tests__/AlphaBackfillPanel.test.tsx",
+        "src/components/admin/leads/MetaAttributionAudit.tsx",
+        "src/components/admin/leads/PushToGhlButton.tsx",
+        "src/components/admin/leads/PushB2bLeadToGhlButton.tsx",
+        "src/components/admin/leads/PushAlphaLeadToGhlButton.tsx",
+        "src/components/admin/leads/ownerName.ts",
+        "src/components/admin/leads/sanitizeNoteHtml.ts"
+      ]
+    },
+    {
+      "id": "ghl",
+      "name": "GHL Integration",
+      "url": "https://claude.ai/code/artifact/b4fa2ea5-a085-4bd9-9422-52713dc208da",
+      "why": "Every GoHighLevel endpoint in use, which function owns it, and which way the data flows. Never invent a response shape — check docs/ghl/ first.",
+      "covers": [
+        "supabase/functions/**ghl**",
+        "supabase/functions/_shared/ghlClient.ts",
+        "supabase/functions/**push-*-lead-to-ghl/**",
+        "supabase/functions/sync-meta-leads/**",
+        "supabase/functions/alpha-digital-sync/**",
+        "supabase/functions/verify-ghl-sync/**",
+        "docs/ghl/**"
+      ]
+    },
+    {
+      "id": "design-vs-build",
+      "name": "Design vs Build",
+      "url": "https://claude.ai/code/artifact/791fd2fd-b1c6-492c-9d1c-1005fa801a56",
+      "why": "Where the running app and the design disagree TODAY. Closing a gap means closing its row here, in the same session.",
+      "covers": [
+        "src/components/admin/leads/**",
+        "src/pages/admin/leads/**",
+        "src/pages/admin/contacts/**",
+        "src/pages/admin/content/*Leads*.tsx",
+        "src/pages/admin/content/UnifiedLeadsInbox.tsx",
+        "src/components/admin/AdminSpotlight.tsx"
+      ],
+      "excludes": [
+        "src/components/admin/leads/AlphaBackfillPanel.tsx",
+        "src/components/admin/leads/__tests__/AlphaBackfillPanel.test.tsx",
+        "src/components/admin/leads/MetaAttributionAudit.tsx",
+        "src/components/admin/leads/PushToGhlButton.tsx",
+        "src/components/admin/leads/PushB2bLeadToGhlButton.tsx",
+        "src/components/admin/leads/PushAlphaLeadToGhlButton.tsx",
+        "src/components/admin/leads/ownerName.ts",
+        "src/components/admin/leads/sanitizeNoteHtml.ts"
+      ]
+    },
+    {
+      "id": "shipped",
+      "name": "Shipped log",
+      "url": "https://claude.ai/code/artifact/1c73c39a-8383-4784-ba26-1483de720f04",
+      "why": "The record of what is actually live. An item lands here the moment it deploys, not when it is committed.",
+      "always": true,
+      "covers": [
+        "src/**",
+        "supabase/functions/**",
+        "supabase/migrations/**"
+      ]
+    }
+  ],
+  "retired": [
+    {
+      "name": "Admin Panel — Real Inventory & Phase Map",
+      "url": "https://claude.ai/code/artifact/3505c2ef-62ba-4115-8144-62e467fa097c",
+      "replacedBy": "Master Plan",
+      "why": "Its page inventory and phase map were folded into the Master Plan."
+    },
+    {
+      "name": "Phase 2 — Execution Stages",
+      "url": "https://claude.ai/code/artifact/eeade9ad-d305-4e18-9d62-d5a19668dd0d",
+      "replacedBy": "Leads Build board",
+      "why": "Stages A–D sequenced Phase 2, which is finished. A page still saying “Stage C · now” is the confusion the board prevents."
+    },
+    {
+      "name": "Leads Category — Unified System Plan",
+      "url": "https://claude.ai/code/artifact/0f12a285-5237-4e96-a769-2553143fbc3e",
+      "replacedBy": "Design Standard + Master Plan",
+      "why": "Split in two: the Standard holds the design decisions, the Master Plan holds the sequence."
+    },
+    {
+      "name": "How It Works — System & Build",
+      "url": "https://claude.ai/code/artifact/b1f8063d-46ad-4623-8ddb-1ff159e8eec9",
+      "replacedBy": "GHL Integration",
+      "why": "Overtaken twice — by the v3 migration and the follower pull. The GoHighLevel surface now has its own page, generated against the vendored spec."
+    },
+    {
+      "name": "Unified UI Kit — Live Samples (duplicate)",
+      "url": "https://claude.ai/code/artifact/31e1bd5b-36e5-4ac6-9463-16e2367ac0f0",
+      "replacedBy": "Live Samples",
+      "why": "Two artifacts carried the same title and drifted apart. Whichever one got opened decided what the components looked like."
+    },
+    {
+      "name": "AlfredAI — Product Roadmap (Phases 0–7)",
+      "url": "https://claude.ai/code/artifact/e53cca00-7989-41e7-9623-4f4d93b1695a",
+      "replacedBy": "Master Plan",
+      "why": "The July phase list. Stopped at Phase 7, before Phase 8 existed."
+    },
+    {
+      "name": "Original Tracked Plan",
+      "url": "https://claude.ai/code/artifact/310dbfe4-b346-475d-903c-2cb0ba01d321",
+      "replacedBy": "Leads Build board",
+      "why": "The hand-written tracker that preceded the board, and kept going stale — which is why the board exists."
+    },
+    {
+      "name": "Admin Overhaul Plan (16 Jul)",
+      "url": "https://claude.ai/code/artifact/82a3cb25-2b92-4705-846a-8df68e85f5f7",
+      "replacedBy": "Master Plan",
+      "why": "The starting sketch, before any of it was built. Worth reading for how the scope was framed; worthless as a description of the app."
+    },
+    {
+      "name": "Monday Brief — Leads Build",
+      "url": "https://claude.ai/code/artifact/454bdb8c-2671-452c-b6a5-c5cc4975f536",
+      "replacedBy": "Leads Build board",
+      "why": "A brief for one Monday in July. A dated page cannot be kept current."
+    },
+    {
+      "name": "Daily Report — Fri 7 Aug",
+      "url": "https://claude.ai/code/artifact/6bee0677-0112-42a9-bf6e-2cc6b808543a",
+      "replacedBy": "Leads Build board",
+      "why": "Daily reports go in chat now. One left lying around gets read as the present state."
+    },
+    {
+      "name": "Moved — see the Master Plan",
+      "url": "https://claude.ai/code/artifact/bcbca797-7136-4fa1-88eb-12db8c410e85",
+      "replacedBy": "Master Plan",
+      "why": "Already a stub pointing at the Master Plan. Found on 21 Aug by listing every published artifact rather than trusting the retired list — it was the one page nobody had counted."
+    }
+  ],
+  "_excludesWhy": "Ops panels, push buttons and helpers share src/components/admin/leads/** with the actual design surfaces. The four design docs describe the row, tiles, toolbar, peek and record — not a backfill panel or a push button. The gate named all four on five commits in two days and was waived every time, which is how a gate stops being one. The broad glob stays so a NEW surface file is covered by default; only known non-surfaces are listed, and adding one here is a deliberate act."
+}
